@@ -1,4 +1,4 @@
-from .token import canonical_piece, istoken
+from .token import canonical_piece, istoken, isempty
 
 
 nrows = 3
@@ -19,6 +19,10 @@ class Board:
                 cells[i] = piece
 
         return cls(cells)
+
+
+    def copy(self):
+        return Board(self.cells.copy())
 
     # This should never be called directly. Use fromstring instead.
     def __init__(self, cells):
@@ -43,6 +47,11 @@ class Board:
             ' {} | {} | {} '.format(self.cells[3], self.cells[4], self.cells[5]),
             ' {} | {} | {} '.format(self.cells[6], self.cells[7], self.cells[8])
         ])
+
+    def empty_spaces(self):
+        for i, p in enumerate(self.cells):
+            if isempty(p):
+                yield self._idx_to_row(i), self._idx_to_col(i)
 
     def __str__(self):
         return ''.join(piece if istoken(piece) else '.' for piece in self.cells)
